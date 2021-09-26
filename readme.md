@@ -17,6 +17,10 @@
 * [Cryptography](#cryptography)
     * [Substitution Cipher I](substitution-cipher-i)
     * [Substitution Cipher II](substitution-cipher-ii)
+    * [Break Me!](#break-me!)
+    * [treasure](#treasure)
+* [Reversing](#reversing)
+    * [no strings](#no-strings)
 ***
 
 # Miscellaneous
@@ -315,6 +319,8 @@ Just a simple substitution cipher to get started...
 
 **Author:** joseph#8210
 
+[substitution-cipher-i.sage](challenges//substitution-cipher-i.sage) | [output.txt](challenges//output_i.txt)
+
 ### Solution
 the encryption is known and works letter by letter, thus we can find the encryption of each letter and use that to inverse the ciphertext:
 ```python
@@ -342,6 +348,9 @@ print(FLAG)
 That's an interesting looking substitution cipher...
 
 **Author:** joseph#8210
+
+
+[substitution-cipher-ii.sage](challenges//substitution-cipher-ii.sage) | [output.txt](challenges//output_ii.txt)
 
 ### Solution
 Similar to the previous challenge, only difference that we need to find the polynomial now, we can do that by knowing that the flag starts with '`DUCTF{`' and ends with '`}`', and use lagrange interpolation to find the polynomial:
@@ -375,3 +384,112 @@ print(FLAG)
 ### Flag
 **`DUCTF{go0d_0l'_l4gr4fg3}`**
 
+## Break Me!
+AES encryption challenge.
+
+**Author:** 2keebs
+
+`nc pwn-2021.duc.tf 31914`
+
+[aes-ecb.py](challenges//aes-ecb.py)
+
+### Solution
+
+AES-ECB one byte at a time attack, I covered it before in my writeup for [H@cktivityCon CTF 2020](https://github.com/W3rni0/HacktivityCon_CTF_2020#a-e-s-t-h-e-t-i-c):
+
+
+```python
+from pwn import *
+import re
+from string import printable
+from Crypto.Cipher import AES
+from base64 import b64decode
+
+# Part 1 - Retrieving the key
+s = remote('pwn-2021.duc.tf', 31914)
+s.recvuntil(":")
+key = '' # !_SECRETSOURCE_!
+
+for i in range(len(key) + 1,16):
+	s.sendline('a' * (16 - i))
+	base_block = re.findall('[A-Za-z0-9+\/=]{64}', s.recvuntil(":").decode('utf-8'))[0]
+	print(base_block)
+	for c in printable:
+		s.sendline('a' * (16 - i) + key + c)
+		block = re.findall('[A-Za-z0-9+\/=]{64}', s.recvuntil(":").decode('utf-8'))[0]
+		if block == base_block:
+			key = key + c
+			print(key)
+			break
+
+s.close()
+
+# Part 2 - Getting the flag
+s = remote('pwn-2021.duc.tf', 31914)
+s.sendlineafter(':\n', ' ' * 16)
+ct = b64decode(s.recvuntil("\n").decode().strip())
+cipher = AES.new(key.encode(), AES.MODE_ECB)
+pt = cipher.decrypt(ct)
+print(pt)
+
+```
+
+### Flag
+**`DUCTF{ECB_M0DE_K3YP4D_D474_L34k}`**
+
+## treasure
+You and two friends have spent the past year playing an ARG that promises valuable treasures to the first team to find three secret shares scattered around the world. At long last, you have found all three and are ready to combine the shares to figure out where the treasure is. Of course, being the greedy individual you are, you plan to use your cryptography skills to deceive your friends into thinking that the treasure is in the middle of no where...
+
+**Author:** joseph#8210
+
+`nc pwn-2021.duc.tf 31901`
+
+[treasure.py](challenges//treasure.py)
+
+### Solution
+We can easily retrieve the secret by first sending 1 as our share, which means that the assumed secret is only the product of the other two shares raised to the power of two, and using our own share we can calculate the secret similarly to the way the combiner does that.
+
+Using the secret and the fake_coords we will calculate the 3rd root of the division between them, and create a new share which is the product of the real share and the result, this will guarantee that the result of the combiner is `secret * fake_secret / secret = fake_secret` and so the result is the fake coordinates, and we can safely use our real coordinates, I wrote the following sage script to perform all of those calculation and interact with the server:
+```python 
+
+from Crypto.Util.number import long_to_bytes
+from pwn import *
+from gmpy2 import iroot
+
+FAKE_COORDS = 5754622710042474278449745314387128858128432138153608237186776198754180710586599008803960884
+p = 13318541149847924181059947781626944578116183244453569385428199356433634355570023190293317369383937332224209312035684840187128538690152423242800697049469987
+K = GF(p)
+
+s = remote('pwn-2021.duc.tf', 31901)
+share = int(s.recvline().split(b' ')[-1])
+s.sendlineafter(': ', '1')
+product = int(s.recvline().split(b' ')[-1])
+REAL_COORDS = pow(share, 3, p) * product % p
+
+FAKE_DIV_REAL = K(FAKE_COORDS) / K(REAL_COORDS)
+FAKE_DIV_REAL_ROOT = FAKE_DIV_REAL.nth_root(3) 
+new_share = share * FAKE_DIV_REAL_ROOT
+
+s.sendlineafter(': ', str(new_share))
+s.sendlineafter(': ', str(REAL_COORDS))
+s.interactive()
+```
+
+### Flag
+**`DUCTF{m4yb3_th3_r34L_tr34sur3_w4s_th3_fr13nDs_w3_m4d3_al0ng_Th3_W4y.......}`**
+
+*** 
+
+# Reversing
+
+## no strings
+This binary contains a free flag. No strings attached, seriously!
+
+**Author:** joseph#8210
+
+[nostrings](challenges//nostrings)
+
+### Solution
+
+### Flag
+**`DUCTF{stringent_strings_string}`**
