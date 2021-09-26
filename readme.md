@@ -6,7 +6,7 @@
 
 ***
 
-# Table of Content
+# Table of Contents
 * [Miscellaneous](#miscellaneous)
     * [Discord](#discord)
     * [The Introduction](#the-introduction)
@@ -31,7 +31,7 @@ How about you visit our help page? You know what they say when you need 'help' d
 **Author:** Crem
 
 ### Solution
-The flag is at the `#request-support` channel on the [CTF discord channel](https://discord.gg/vXtuGXy)
+The flag is in the `#request-support` channel on the [CTF discord channel](https://discord.gg/vXtuGXy)
 
 ### Flag
 **`DUCTF{if_you_are_having_challenge_issues_come_here_pls}`**
@@ -44,13 +44,13 @@ Are you ready to start your journey?
 `nc pwn-2021.duc.tf 31906`
 
 ### Solution
-With the challenge we're given a command to run, this command (`nc`) connects to a server identified with the domain pwn-2021.duc.tf and interacts with a service running on port `31906`, running it gives us the following:
+With the challenge we're given a command to run, this command (`nc`) connects to a server identified with the domain pwn-2021.duc.tf and interacts with a service running on port `31906`, running it returns the following question from the server:
 
 ```
 wh47 15 y0ur n4m3 h4ck3r?
 ```
 
-Entering a name starts printing the hacker manifesto, this is an essay written in the 80s by "The Mentor" after his arrest and is considered a major piece of the hacker culture, the full essay is linked below and worth a read if you consider yourself part of the hacking community.
+Entering a name will starts printing the hacker manifesto, this is an essay written in the 80s by "The Mentor" after his arrest and is considered a major piece of the hacker culture, the full essay is linked below and worth a read if you consider yourself part of the hacking community.
 
 After printing the essay, the following line is written:
 ```
@@ -94,6 +94,9 @@ DUCTF{w3lc0m3_70_7h3_duc7f_7hund3rd0m3_h4ck3r}
 ### Flag 
 **`DUCTF{w3lc0m3_70_7h3_duc7f_7hund3rd0m3_h4ck3r}`**
 
+### Refereces
+* [The Hacker Manifesto](http://phrack.org/issues/7/3.html)
+
 ## Twitter
 If you have been paying attention to our Twitter, we have been using flags in the background of our graphics this year. However, one of these flags stands out a bit more than the rest! Can you find it?
 
@@ -127,7 +130,7 @@ QUIZ TIME! Just answer the questions. Pretty easy right?
 `nc pwn-2021.duc.tf 31905`
 
 ### Solution
-This challenge requires you to decode and encode using different popular formats such as base64, binary and ROT13. Not enough time is given to do those manually, so I ended up writing the following python script that interacts with the server and performs the conversions (commented are the task required):
+This challenge requires you to decode and encode using different popular formats such as base64, binary and ROT13. Not enough time is given to do those manually, so I ended up writing the following python script that interacts with the server and performs the conversions (the tasks required are commented):
 ```python
 from pwn import *
 from urllib.parse import unquote
@@ -224,9 +227,9 @@ Can you find Babushka's missing vodka? It's buried pretty deep, like 1000 steps,
 ### Solution
 This type of challenge is really common and I've covered a variation of it before in [my writeup for TJCTF 2020](https://github.com/W3rni0/TJCTF_2020#zipped-up).
 
-With the challenge we're given a file falsely named `flag.txt`, this file is actually a compressed file of either `bzip2`, `zip`, `gzip` or `xz` format. And, as the description for the challenge suggests, it contains another compressed file of the same type and so on. decompressing each file manually is plausible but will require a lot of work, so we can automate the process by scripting.
+With the challenge we're given a file falsely named `flag.txt`, this file is actually a compressed file of either `bzip2`, `zip`, `gzip` or `xz` format. And, as the description for the challenge suggests, it contains another compressed file of the same type and so on. decompressing each file manually is possible but will require a lot of work, so we can automate the process by scripting.
 
-For this challenge I wrote the following bash script that for each file in the working directory checks its type, and if it of one of the above compression file formats, the script extract the content of the file and removes it. This process terminates only when there aren't any compressed files in the directory:
+For that I wrote the following bash script that for each file in the working directory checks its type, and if it of one of the above compression file formats, the script extract the content of the file and removes it. This process terminates only when there aren't any compressed files in the directory:
 
 ```bash
 #!/bin/bash
@@ -293,7 +296,7 @@ I've opened a new store that provides free furnishings and floormats. If you kno
 [floormat.py](challenges//floormat.py)
 
 ### Solution
-The function str.format() is used to replace a string we control with an object, which gives us access to object's attributes, one of them is a dictionary of global variables in the init of the object, which contain the flag:
+The function str.format() is used to replace a string we control with an object, which gives us access to object's attributes, one of them is a dictionary of global variables in the init of the object, which contains the flag:
 ```python
 from pwn import *
 
@@ -322,7 +325,7 @@ Just a simple substitution cipher to get started...
 [substitution-cipher-i.sage](challenges//substitution-cipher-i.sage) | [output.txt](challenges//output_i.txt)
 
 ### Solution
-the encryption is known and works letter by letter, thus we can find the encryption of each letter and use that to inverse the ciphertext:
+The encryption is known and works letter by letter, thus we can find the encryption of each letter and use that to inverse the ciphertext:
 ```python
 from string import printable
 
@@ -353,7 +356,7 @@ That's an interesting looking substitution cipher...
 [substitution-cipher-ii.sage](challenges//substitution-cipher-ii.sage) | [output.txt](challenges//output_ii.txt)
 
 ### Solution
-Similar to the previous challenge, only difference that we need to find the polynomial now, we can do that by knowing that the flag starts with '`DUCTF{`' and ends with '`}`', and use lagrange interpolation to find the polynomial:
+Similar to the previous challenge, only difference is that we need to find the polynomial now, we can do that by knowing that the flag starts with '`DUCTF{`' and ends with '`}`', and use lagrange interpolation to find the polynomial:
 
 ```python
 from string import ascii_lowercase, digits, printable
