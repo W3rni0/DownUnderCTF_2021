@@ -490,6 +490,38 @@ This binary contains a free flag. No strings attached, seriously!
 [nostrings](challenges//nostrings)
 
 ### Solution
+With the challenge we're given an ELF binary file, running it prompt us to give the flag:
+
+<div align="center">
+    <img src="assets//images//nostrings_1.png">
+</div>
+
+So this is a flag checker, we can look at the disassembly to try and understand how it works, for disassembly in this challenge I used IDA free. The first thing that pops while looking at the disassemly is the main function:
+
+<div align="center">
+    <img src="assets//images//nostrings_2.png">
+</div>
+
+Even without looking at the instructions themselves we can figure out that it is looping over something, presumably our input, at further inspection we can see that is does just that while comparing each letter to a string it has in it's data section (annotated to make it more understandable):
+
+<div align="center">
+    <img src="assets//images//nostrings_3.png">
+</div>
+
+And we can get the full flag from the data section:
+
+<div align="center">
+    <img src="assets//images//nostrings_4.png">
+</div>
+
+The reason that strings don't normally will pick up this flag is because it is encoded with 16-bit where strings uses 7-bit (ASCII) by default, we can choose another encoding using the `-e` flag:
+
+<div align="center">
+    <img src="assets//images//nostrings_5.png">
+</div>
+
+
+
 
 ### Flag
 **`DUCTF{stringent_strings_string}`**
