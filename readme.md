@@ -30,10 +30,12 @@ How about you visit our help page? You know what they say when you need 'help' d
 
 **Author:** Crem
 
-#### Solution
+**Solution**
+
 The flag is in the `#request-support` channel on the [CTF discord channel](https://discord.gg/vXtuGXy)
 
-#### Flag
+**Flag**
+
 **`DUCTF{if_you_are_having_challenge_issues_come_here_pls}`**
 
 ## The Introduction
@@ -43,7 +45,8 @@ Are you ready to start your journey?
 
 `nc pwn-2021.duc.tf 31906`
 
-#### Solution
+**Solution**
+
 With the challenge we're given a command to run, this command (`nc`) connects to a server identified with the domain pwn-2021.duc.tf and interacts with a service running on port `31906`, running it returns the following question from the server:
 
 ```
@@ -91,10 +94,11 @@ DUCTF{w3lc0m3_70_7h3_duc7f_7hund3rd0m3_h4ck3r}
 ```
 
 
-#### Flag 
+**Flag**
+ 
 **`DUCTF{w3lc0m3_70_7h3_duc7f_7hund3rd0m3_h4ck3r}`**
 
-#### Refereces
+### Refereces
 * [The Hacker Manifesto](http://phrack.org/issues/7/3.html)
 
 ## Twitter
@@ -104,7 +108,8 @@ While you're there, why don't you give us a follow to keep up to date with DownU
 
 **Author:** Crem
 
-#### Solution
+**Solution**
+
 This one is pretty guessy but the solution is written in the description so I guess I can't complain, this year the CTF graphics used flags from the previous competition, as can be seen here:
 
 <div align="center">
@@ -119,7 +124,8 @@ But one of the graphics posted two weeks before the competition included the fla
 
 (hint - look down)
 
-#### Flag
+**Flag**
+
 **`DUCTF{EYES_ON_THE_PRIZES}`**
 
 ## General Skills Quiz
@@ -129,7 +135,8 @@ QUIZ TIME! Just answer the questions. Pretty easy right?
 
 `nc pwn-2021.duc.tf 31905`
 
-#### Solution
+**Solution**
+
 This challenge requires you to decode and encode using different popular formats such as base64, binary and ROT13. Not enough time is given to do those manually, so I ended up writing the following python script that interacts with the server and performs the conversions (the tasks required are commented):
 ```python
 from pwn import *
@@ -214,7 +221,8 @@ Bloody Ripper! Here is the grand prize!
    |#|   
   //|\\
 ```
-#### Flag
+**Flag**
+
 **`DUCTF{you_aced_the_quiz!_have_a_gold_star_champion}`**
 
 ## rabbit
@@ -224,7 +232,8 @@ Can you find Babushka's missing vodka? It's buried pretty deep, like 1000 steps,
 
 [flag.txt](challenges//flag.txt)
 
-#### Solution
+**Solution**
+
 This type of challenge is really common and I've covered a variation of it before in [my writeup for TJCTF 2020](https://github.com/W3rni0/TJCTF_2020#zipped-up).
 
 With the challenge we're given a file falsely named `flag.txt`, this file is actually a compressed file of either `bzip2`, `zip`, `gzip` or `xz` format. And, as the description for the challenge suggests, it contains another compressed file of the same type and so on. decompressing each file manually is possible but will require a lot of work, so we can automate the process by scripting.
@@ -283,7 +292,8 @@ I inferred by the symbols in the string that this is a base64 encoded message, a
     <img src="assets//images//rabbit.png">
 </div>
 
-#### Flag
+**Flag**
+
 **`DUCTF{babushkas_v0dka_was_h3r3}`**
 
 ## Floormat
@@ -295,7 +305,8 @@ I've opened a new store that provides free furnishings and floormats. If you kno
 
 [floormat.py](challenges//floormat.py)
 
-#### Solution
+**Solution**
+
 The function str.format() is used to replace a string we control with an object, which gives us access to object's attributes, one of them is a dictionary of global variables in the init of the object, which contains the flag:
 ```python
 from pwn import *
@@ -310,7 +321,8 @@ s.sendline("F")
 s.sendline("flutter")
 s.interactive()
 ```
-#### Flag
+**Flag**
+
 **`DUCTF{fenomenal_flags_from_funky_formats_ffffff}`**
 
 ***
@@ -324,7 +336,8 @@ Just a simple substitution cipher to get started...
 
 [substitution-cipher-i.sage](challenges//substitution-cipher-i.sage) | [output.txt](challenges//output_i.txt)
 
-#### Solution
+**Solution**
+
 The encryption is known and works letter by letter, thus we can find the encryption of each letter and use that to inverse the ciphertext:
 ```python
 from string import printable
@@ -344,7 +357,8 @@ enc = open('./output.txt', 'r').read().strip()
 FLAG = decrypt(enc, f)
 print(FLAG)
 ```
-#### Flag
+**Flag**
+
 **`DUCTF{sh0uld'v3_us3d_r0t_13}`**
 
 ## Substitution Cipher II
@@ -355,7 +369,8 @@ That's an interesting looking substitution cipher...
 
 [substitution-cipher-ii.sage](challenges//substitution-cipher-ii.sage) | [output.txt](challenges//output_ii.txt)
 
-#### Solution
+**Solution**
+
 Similar to the previous challenge, only difference is that we need to find the polynomial now, we can do that by knowing that the flag starts with '`DUCTF{`' and ends with '`}`', and use lagrange interpolation to find the polynomial:
 
 ```python
@@ -384,7 +399,8 @@ f = P.lagrange_polynomial(points)
 FLAG = decrypt(enc,f)
 print(FLAG)
 ```
-#### Flag
+**Flag**
+
 **`DUCTF{go0d_0l'_l4gr4fg3}`**
 
 ## Break Me!
@@ -396,7 +412,7 @@ AES encryption challenge.
 
 [aes-ecb.py](challenges//aes-ecb.py)
 
-#### Solution
+**Solution**
 
 AES-ECB one byte at a time attack, I covered it before in my writeup for [H@cktivityCon CTF 2020](https://github.com/W3rni0/HacktivityCon_CTF_2020#a-e-s-t-h-e-t-i-c):
 
@@ -437,7 +453,8 @@ print(pt)
 
 ```
 
-#### Flag
+**Flag**
+
 **`DUCTF{ECB_M0DE_K3YP4D_D474_L34k}`**
 
 ## treasure
@@ -449,7 +466,8 @@ You and two friends have spent the past year playing an ARG that promises valuab
 
 [treasure.py](challenges//treasure.py)
 
-#### Solution
+**Solution**
+
 We can easily retrieve the secret by first sending 1 as our share, which means that the assumed secret is only the product of the other two shares raised to the power of two, and using our own share we can calculate the secret similarly to the way the combiner does that.
 
 Using the secret and the fake_coords we will calculate the 3rd root of the division between them, and create a new share which is the product of the real share and the result, this will guarantee that the result of the combiner is `secret * fake_secret / secret = fake_secret` and so the result is the fake coordinates, and we can safely use our real coordinates, I wrote the following sage script to perform all of those calculation and interact with the server:
@@ -478,7 +496,8 @@ s.sendlineafter(': ', str(REAL_COORDS))
 s.interactive()
 ```
 
-#### Flag
+**Flag**
+
 **`DUCTF{m4yb3_th3_r34L_tr34sur3_w4s_th3_fr13nDs_w3_m4d3_al0ng_Th3_W4y.......}`**
 
 *** 
@@ -492,7 +511,8 @@ This binary contains a free flag. No strings attached, seriously!
 
 [nostrings](challenges//nostrings)
 
-#### Solution
+**Solution**
+
 With the challenge we're given an ELF binary file, running it prompt us to give the flag:
 
 <div align="center">
@@ -526,5 +546,6 @@ The reason that strings don't normally will pick up this flag is because it is e
 
 
 
-#### Flag
+**Flag**
+
 **`DUCTF{stringent_strings_string}`**
