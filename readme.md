@@ -98,7 +98,8 @@ DUCTF{w3lc0m3_70_7h3_duc7f_7hund3rd0m3_h4ck3r}
  
 **`DUCTF{w3lc0m3_70_7h3_duc7f_7hund3rd0m3_h4ck3r}`**
 
-### Refereces
+**Refereces**
+
 * [The Hacker Manifesto](http://phrack.org/issues/7/3.html)
 
 ## Twitter
